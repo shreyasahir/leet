@@ -1,0 +1,10 @@
+https://leetcode.com/problems/two-sum/description/
+
+https://www.quora.com/How-should-I-prepare-for-coding-interviews-for-companies-like-Google-Facebook-and-Microsoft-if-I-have-roughly-7-months-available-to-me
+
+
+system design
+https://www.educative.io/collection/5668639101419520/5649050225344512
+
+
+https://github.com/yangshun/tech-interview-handbook/tree/master/algorithms
