@@ -12,3 +12,6 @@ https://github.com/yangshun/tech-interview-handbook/tree/master/algorithms
 
 https://leetcode.com/articles/regular-expression-matching/
 https://www.geeksforgeeks.org/wildcard-pattern-matching/
+
+
+http://www.mathcs.emory.edu/~cheung/Courses/323/Syllabus/DynProg/money-change.html
