@@ -12,51 +12,51 @@ const (
 	minInt32 = -1 << 31
 )
 
-// func myAtoi(str string) int {
-// 	var out int64
-// 	// isParsing marked as we're parsing the number.
-// 	// isParsing is set to true whenever we encountered the sign (+/-) or digits rune (0..9).
-// 	// Note: if isParsing == true, then all runes will be discarded, except digits rune (0-9).
-// 	sign, isParsing := "", false
+func myAtoi(str string) int {
+	var out int64
+	// isParsing marked as we're parsing the number.
+	// isParsing is set to true whenever we encountered the sign (+/-) or digits rune (0..9).
+	// Note: if isParsing == true, then all runes will be discarded, except digits rune (0-9).
+	sign, isParsing := "", false
 
-// 	for _, r := range str {
-// 		if r == ' ' {
-// 			if isParsing { // "  1", " 1 123"
-// 				break
-// 			}
-// 			continue
-// 		}
-// 		if r == '+' || r == '-' {
-// 			if isParsing || sign != "" { // "--0", "++0", "1-123"
-// 				break
-// 			}
-// 			isParsing = true
-// 			sign = string(r)
-// 			continue
-// 		}
-// 		if !(r >= 48 && r <= 57) { // If rune also not the digit then stop parsing
-// 			break
-// 		}
+	for _, r := range str {
+		if r == ' ' {
+			if isParsing { // "  1", " 1 123"
+				break
+			}
+			continue
+		}
+		if r == '+' || r == '-' {
+			if isParsing || sign != "" { // "--0", "++0", "1-123"
+				break
+			}
+			isParsing = true
+			sign = string(r)
+			continue
+		}
+		if !(r >= 48 && r <= 57) { // If rune also not the digit then stop parsing
+			break
+		}
 
-// 		isParsing = true
-// 		out *= 10
-// 		out += int64(r - 48)                     // Convert digit's code point to its actual integer value
-// 		if out >= maxInt32 || -out <= minInt32 { // Stop parsing when overflow
-// 			break
-// 		}
-// 	}
+		isParsing = true
+		out *= 10
+		out += int64(r - 48)                     // Convert digit's code point to its actual integer value
+		if out >= maxInt32 || -out <= minInt32 { // Stop parsing when overflow
+			break
+		}
+	}
 
-// 	if sign == "-" {
-// 		out = -out
-// 		if out < minInt32 {
-// 			return minInt32
-// 		}
-// 	}
-// 	if out > maxInt32 {
-// 		return maxInt32
-// 	}
-// 	return int(out)
-// }
+	if sign == "-" {
+		out = -out
+		if out < minInt32 {
+			return minInt32
+		}
+	}
+	if out > maxInt32 {
+		return maxInt32
+	}
+	return int(out)
+}
 
 func myAtoi(str string) int {
 

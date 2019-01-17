@@ -21,6 +21,9 @@
 // cache.get(4);       // returns 4
 // https://leetcode.com/problems/lru-cache/
 
+// ["LRUCache","put","put","get","put","get","put","get","get","get"]
+// [[2],[1,1],[2,2],[1],[3,3],[2],[4,4],[1],[3],[4]]
+
 package main
 
 import (
@@ -28,70 +31,106 @@ import (
 )
 
 func main() {
-	obj := Constructor(2);
-	param_1 := obj.Get(key);
-	obj.Put(1,1);
-	obj.Put(2,3)
-	obj.get(1)
-	obj.Put(3,4)
-	fmt.Println("obj",obj)
+	obj := Constructor(2)
+	obj.Put(1, 1)
+	obj.Put(2, 2)
+	fmt.Println(obj.Get(1))
+	fmt.Println("obj", obj)
+
+	obj.Put(3, 3)
+	fmt.Println(obj.Get(2))
+	fmt.Println("obj", obj)
+
+	obj.Put(4, 4)
+	fmt.Println(obj.Get(1))
+	fmt.Println("obj", obj)
+
+	fmt.Println(obj.Get(3))
+	fmt.Println("obj", obj)
+
+	obj.Get(4)
+
+	fmt.Println("obj", obj)
+}
+
+type node struct {
+	prev *node
+	next *node
+	key  int
+	val  int
 }
 
 type LRUCache struct {
-	data     map[int]int
-	frequency map[int]int
+	data     map[int]*node
 	capacity int
+	head     *node
+	tail     *node
 }
 
 func Constructor(capacity int) LRUCache {
 	return LRUCache{
-		capacity: capacity
+		capacity: capacity,
+		data:     make(map[int]*node),
 	}
+}
+
+func (this *LRUCache) remove(n *node) {
+	if n == this.head {
+		this.head = n.next
+	}
+	if n == this.tail {
+		this.tail = n.prev
+	}
+
+	if n.next != nil {
+		n.next.prev = n.prev
+	}
+
+	if n.prev != nil {
+		n.prev.next = n.next
+	}
+}
+
+func (this *LRUCache) add(n *node) {
+	n.prev = nil
+	n.next = this.head
+	if n.next != nil {
+		n.next.prev = n
+	}
+	this.head = n
+	if this.tail == nil {
+		this.tail = n
+	}
+
 }
 
 func (this *LRUCache) Get(key int) int {
-	if this.data == nil {
-		this.data = make(map[int]int)
-	} else if val,ok := this.data[key];ok {
-		this.frequency[key]++
-		return this.data[key]
-	} else{
-		-1
+	n, ok := this.data[key]
+	if !ok {
+		return -1
 	}
-
+	this.remove(n)
+	this.add(n)
+	return n.val
 }
 
 func (this *LRUCache) Put(key int, value int) {
-	if this.Get(key) == -1{
-		if len(this.data) == this.capacity {
-			deleteKey = this.leastUsedKey()
-			delete(this.data,deleteKey.Key)
+	n, ok := this.data[key]
+
+	if !ok {
+		n = &node{key: key, val: value}
+		this.data[key] = n
+	} else {
+		n.val = value
+		this.remove(n)
+	}
+
+	this.add(n)
+	if len(this.data) > this.capacity {
+		n = this.tail
+		if n != nil {
+			this.remove(n)
+			delete(this.data, n.key)
 		}
-		this.data[key] = value
 	}
 }
-
-func (this *LRUCache) leastUsedKey() {
-	p := make(PairList, len(this.data))
-	i := 0
-	for k, v := range this.data {
-	p[i] = Pair{k, v}
-	}
-	sort.Sort(p)
-	return p[0]
-}
-
-type PairList []Pair
-type Pair struct {
-	Key string
-	Value int
-}
-func (p PairList) Len() int { return len(p) }
-func (p PairList) Less(i, j int) bool { return p[i].Value < p[j].Value }
-func (p PairList) Swap(i, j int){ p[i], p[j] = p[j], p[i] }
-/**
- * Your LRUCache object will be instantiated and called as such:
- * obj := Constructor(capacity);
- * param_1 := obj.Get(key);
- * obj.Put(key,value);
- */
