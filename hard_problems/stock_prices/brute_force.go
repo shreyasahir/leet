@@ -1,0 +1,32 @@
+package main
+
+import (
+	"fmt"
+)
+
+func main() {
+	input := []int{2, 7, 1, 8, 2, 8, 4, 5, 9, 0, 4, 5}
+	fmt.Println("input", input)
+	fmt.Println(bruteForceSingleSellProfit(input))
+}
+
+func max(a, b int) int {
+	if a > b {
+		return a
+	}
+	return b
+}
+
+func bruteForceSingleSellProfit(arr []int) int {
+	bestProfit := 0
+	n := len(arr)
+	for i := 0; i < n; i++ {
+		for j := i + 1; j < n; j++ {
+			bestProfit = max(bestProfit, arr[j]-arr[i])
+			fmt.Println("bestProfit", bestProfit)
+
+		}
+		// fmt.Println("bestProfit", bestProfit)
+	}
+	return bestProfit
+}

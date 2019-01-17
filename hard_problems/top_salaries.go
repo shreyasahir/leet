@@ -30,3 +30,53 @@
 // | Sales      | Sam      | 60000  |
 // +------------+----------+--------+
 // https://leetcode.com/problems/department-top-three-salaries/
+
+select count(*) , emp.name, emp.salary ,dep.name from Employee as emp,department as dep
+where emp.DepartmentId = dep.Id 
+group by emp.Id
+having count(*) < 3
+order by dep.name, Salary desc
+
+SELECT Email, COUNT(*)
+FROM user_log
+GROUP BY Email
+HAVING COUNT(*) > 1
+ORDER BY UpdateDate DESC
+
+
+SELECT    
+d.name  as "Department"                     
+,e1.Name as "Employee"
+, e1.Salary as "Salary"
+
+FROM 
+Employee e1 
+JOIN Employee e2  JOIN Department d
+
+WHERE 
+e1.DepartmentId = e2.DepartmentId 
+AND e1.Salary <= e2.Salary  AND d.id = e2.DepartmentId
+
+
+GROUP BY d.name,e1.id
+HAVING COUNT(DISTINCT(e2.Salary)) <= 3
+ORDER BY d.name , salary DESC 
+
+
+SELECT
+    d.Name AS 'Department', e1.Name AS 'Employee', e1.Salary
+FROM
+    Employee e1
+        JOIN
+    Department d ON e1.DepartmentId = d.Id
+WHERE
+    3 > (SELECT
+            COUNT(DISTINCT e2.Salary)
+        FROM
+            Employee e2
+        WHERE
+            e2.Salary > e1.Salary
+                AND e1.DepartmentId = e2.DepartmentId
+        )
+;
+

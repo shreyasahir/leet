@@ -20,32 +20,53 @@
 
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"math"
+)
 
 func main() {
-	input := []int{3, 3, 5, 0, 0, 3, 1, 4}
+	input := []int{6, 1, 3, 2, 4, 7}
 	k := 2
+	fmt.Println("input", input)
 	fmt.Println(maxProfit(k, input))
+	// fmt.Println(maxDiff(k, input))
+
+}
+
+func max(a, b int) int {
+	if a > b {
+		return a
+	}
+	return b
 }
 
 func maxProfit(k int, prices []int) int {
-	var result []int
-	for i := 1; i < len(prices); i++ {
-		result = append(result, prices[i]-prices[i-1])
+	n := len(prices)
+	if k == 0 || n == 0 {
+		return 0
 	}
 
-	fmt.Println("result", result)
-	count := 0
-	value := 0
-	for _, v := range result {
-		if k*2 == count {
-			break
-		}
-		if v > 0 {
-			value += v
-			count++
-		}
-
+	if k > n/2 {
+		k = n + 1
 	}
-	return value
+
+	stock := make([]int, k*2)
+	for k := range stock {
+		stock[k] = int(math.MinInt32)
+	}
+	stock[0] = -prices[0]
+	for i := 1; i < n; i++ {
+		stock[0] = max(stock[0], -prices[i])
+		fmt.Println("stock[0]", stock[0])
+
+		for j := 1; j < 2*k; j += 2 {
+			stock[j] = max(stock[j], stock[j-1]+prices[i])
+			if j+1 < 2*k {
+				stock[j+1] = max(stock[j+1], stock[j]-prices[i])
+			}
+		}
+		fmt.Println(stock)
+	}
+	return max(0, stock[2*k-1])
 }
