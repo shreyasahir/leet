@@ -17,3 +17,35 @@
 // Output: 7
 // Explanation: Buy on day 2 (price = 2) and sell on day 3 (price = 6), profit = 6-2 = 4.
 //              Then buy on day 5 (price = 0) and sell on day 6 (price = 3), profit = 3-0 = 3.
+
+package main
+
+import "fmt"
+
+func main() {
+	input := []int{3, 3, 5, 0, 0, 3, 1, 4}
+	k := 2
+	fmt.Println(maxProfit(k, input))
+}
+
+func maxProfit(k int, prices []int) int {
+	var result []int
+	for i := 1; i < len(prices); i++ {
+		result = append(result, prices[i]-prices[i-1])
+	}
+
+	fmt.Println("result", result)
+	count := 0
+	value := 0
+	for _, v := range result {
+		if k*2 == count {
+			break
+		}
+		if v > 0 {
+			value += v
+			count++
+		}
+
+	}
+	return value
+}
