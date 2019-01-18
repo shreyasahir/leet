@@ -22,11 +22,11 @@ package main
 
 import (
 	"fmt"
-	"math"
 )
 
 func main() {
-	input := []int{6, 1, 3, 2, 4, 7}
+	//input := []int{6, 1, 3, 2, 4, 7}
+	input := []int{3, 3, 5, 0, 0, 3, 1, 4}
 	k := 2
 	fmt.Println("input", input)
 	fmt.Println(maxProfit(k, input))
@@ -41,32 +41,43 @@ func max(a, b int) int {
 	return b
 }
 
+// if(prices==null||prices.length<=1)
+// return 0;
+
+// int min=prices[0]; // min so far
+// int result=0;
+
+// for(int i=1; i<prices.length; i++){
+// result = Math.max(result, prices[i]-min);
+// min = Math.min(min, prices[i]);
+// }
+
+// return result;
+
 func maxProfit(k int, prices []int) int {
-	n := len(prices)
-	if k == 0 || n == 0 {
+
+	if len(prices) == 0 {
 		return 0
 	}
-
-	if k > n/2 {
-		k = n + 1
+	var result int
+	min := prices[0]
+	for i := 1; i < len(prices); i++ {
+		result = max(result, prices[i]-min)
+		min = minimum(min, prices[i])
 	}
+	return result
+}
 
-	stock := make([]int, k*2)
-	for k := range stock {
-		stock[k] = int(math.MinInt32)
+func max(a, b int) int {
+	if a > b {
+		return a
 	}
-	stock[0] = -prices[0]
-	for i := 1; i < n; i++ {
-		stock[0] = max(stock[0], -prices[i])
-		fmt.Println("stock[0]", stock[0])
+	return b
+}
 
-		for j := 1; j < 2*k; j += 2 {
-			stock[j] = max(stock[j], stock[j-1]+prices[i])
-			if j+1 < 2*k {
-				stock[j+1] = max(stock[j+1], stock[j]-prices[i])
-			}
-		}
-		fmt.Println(stock)
+func minimum(a, b int) int {
+	if a < b {
+		return a
 	}
-	return max(0, stock[2*k-1])
+	return b
 }
