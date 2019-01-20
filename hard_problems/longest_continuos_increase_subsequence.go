@@ -13,3 +13,41 @@
 // func findLengthOfLCIS(nums []int) int {
 
 // }
+// https://leetcode.com/problems/longest-continuous-increasing-subsequence/
+
+package main
+
+import "fmt"
+
+func main() {
+
+	arr := []int{1, 3, 5, 4, 7}
+	fmt.Println(findLengthOfLCIS(arr))
+}
+
+func max(a, b int) int {
+
+	if a > b {
+		return a
+	}
+	return b
+}
+
+func findLengthOfLCIS(nums []int) int {
+	maxLen := 0
+	i := 0
+
+	for i < len(nums) {
+		curr := 1
+		for i+1 < len(nums) && nums[i] < nums[i+1] {
+			curr += 1
+			i++
+		}
+		if maxLen <= curr {
+
+			maxLen = curr
+		}
+		i += 1
+	}
+	return maxLen
+}

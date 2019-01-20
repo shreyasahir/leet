@@ -34,59 +34,63 @@ func min(a, b int) int {
 	}
 	return a
 }
+
 func strongPasswordChecker(s string) int {
-	requiredChar := getRequiredChar(s)
-
-	fmt.Println("requiredchar", requiredChar)
-	if len(s) < 6 {
-		return max(requiredChar, 6-len(s))
+	n := len(s)
+	if n < 6 {
+		return 6 - n
 	}
+	end := s[0]
+	upper := end >= 'A' && end <= 'Z'
+	lower := end >= 'a' && end <= 'z'
+	digit := end >= '0' && end <= '9'
 
-	replace := 0
-	oned := 0
-	twod := 0
+	endRep := 1
+	change := 0
+	delete := [3]int{}
 
-	for i := 0; i < len(s); {
-		length := 1
-		for i+length < len(s) && s[i+length] == s[i+length-i] {
-			length++
-		}
-		if length >= 3 {
-			replace += length / 3
-			if length%3 == 0 {
-				oned++
+	for i := 0; i < n; i++ {
+		if s[i] == end {
+			endRep++
+		} else {
+			change += endRep / 3
+			if endRep/3 > 0 {
+				delete[endRep%3]++
 			}
-			if length%3 == 1 {
-				twod++
-			}
-		}
-		i += length
-	}
+			end = s[i]
+			upper = end >= 'A' && end <= 'Z'
+			lower = end >= 'a' && end <= 'z'
+			digit = end >= '0' && end <= '9'
 
-	if len(s) <= 20 {
-		return max(requiredChar, replace)
-	}
-	deleteCount := len(s) - 20
-
-	replace -= min(deleteCount, oned)
-	replace -= min(max(deleteCount-oned, 0), twod) / 2
-	replace -= max(deleteCount-oned-twod, 0) / 3
-
-	return deleteCount + max(requiredChar, replace)
-}
-
-func getRequiredChar(s string) int {
-	lowercase, uppercase, digit := 1, 1, 1
-
-	for _, v := range s {
-		if 0 <= int(v-'0') && int(v-'0') <= 9 {
-			digit = 0
-		} else if v >= 'a' && v <= 'z' {
-			lowercase = 0
-		} else if v >= 'A' && v <= 'Z' {
-			uppercase = 0
+			endRep = 1
 		}
 	}
-	return lowercase + digit + uppercase
+	change += endRep / 3
+	if endRep/3 > 0 {
+		delete[endRep%3]++
+	}
+	checkReq := 0
+	if !upper {
+		checkReq += 1
+	}
+	if !lower {
+		checkReq += 1
+	}
+	if !digit {
+		checkReq += 1
+	}
+	if n > 20 {
+		dele := n - 20
 
+		if dele <= delete[0] {
+			change -= dele
+		} else if dele-delete[0] <= 2*delete[1] {
+			change -= delete[0] + (dele - delete[0]/2)
+		} else {
+			change -= delete[0] + delete[1] + (dele-delete[0-2*delete[1]])/3
+		}
+		return dele + max(checkReq, change)
+	} else {
+		return max(6-n, max(checkReq, change))
+	}
 }

@@ -5,8 +5,12 @@ import (
 )
 
 func main() {
-	s := "aaaaaaa"
-	wordDict := []string{"aaaa", "aaa"}
+	// s := "aaaaaaa"
+	s := "catsanddog"
+
+	// wordDict := []string{"aaaa", "aaa"}
+	wordDict := []string{"cat", "cats", "and", "sand", "dog"}
+
 	fmt.Println(wordBreak(s, wordDict))
 }
 

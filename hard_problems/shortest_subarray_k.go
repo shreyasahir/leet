@@ -26,3 +26,38 @@
 // func shortestSubarray(A []int, K int) int {
 
 // }
+
+package main
+
+import "fmt"
+
+func main() {
+	arr := []int{1, 2}
+	k := 4
+	fmt.Println(shortestSubarray(arr, k))
+}
+
+//brute force
+
+func shortestSubarray(A []int, k int) int {
+	n := len(A)
+	minLength := n + 1
+	for i := 0; i < n; i++ {
+		currSum := A[i]
+		if currSum >= k {
+			return 1
+		}
+
+		for j := i + 1; j < n; j++ {
+			currSum += A[j]
+			if currSum >= k && j-i+1 < minLength {
+				minLength = j - i + 1
+			}
+		}
+	}
+
+	if minLength > n {
+		return -1
+	}
+	return minLength
+}
